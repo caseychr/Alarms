@@ -1,0 +1,49 @@
+
+ X Create Model for Alarms
+ X Add all strings to strings.xml
+ X Create all layouts
+ X Create MVP UI Views
+ X Create Fragments/Presenters
+ - CreateAlarm
+   X Hookup all widgets
+   X Create Popup Windows for timepicker, days and ringtones
+   X Create TimePicker
+   X Create RecyclerView for Days
+   X Create RecyclerView for Ringtones
+   - Create Implicit Intent for retrieving Ringtone
+ X AlarmList
+   X Create RecyclerView
+   X Create menu button Create New Alarm
+   X Hook up to CreateAlarm Fragment
+ X Create Alarm Service
+ - Create Ringtone Service
+ X Create Notification Service
+ - SQLite
+   X Setup DB for SQLite
+   X Setup Singleton for CRUD commands of alarms
+   X Hook up Singleton to UI fragments
+   - Add UUID for Alarms to query and upgrade correctly
+ X Create Alarm Service (Started service)
+   X Create Broadcast Receiver and intents
+   X Create Pending Intents for multiple alarms
+   X Trigger Alarm fragment should appear with Ringtone sounding off
+ X Create Notification
+ - Alarms Utility class -> to determine and set the next alarm time for each alarm
+   - Unit test for this in Espresso
+ - Make CreateAlarm fragment partially slide up from bottom
+   - Make animation for sliding fragment
+
+ - Create tabs for Alarms, CountdownTimer and StopWatch
+ - Create new theme in styles.xml
+
+ - CountdownTimer
+   - Create edit text to enter time - In reverse
+   - Convert time entered to correct intervals
+   - Create Pause/Resume button - save the timer to resume
+   - Cancel button - Animate from timer back to edit text
+   - Create Start button - Animate from edit text to timer
+   - Create Recycler Adapter for multiple countdown timers at once
+
+ - StopWatch
+
+ - Make your own Ringtone!
