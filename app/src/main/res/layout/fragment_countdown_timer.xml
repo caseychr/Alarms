@@ -39,7 +39,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center" android:textStyle="bold"
         android:ems="10" android:inputType="textPersonName" android:hint="00:00:00"
-        android:textDirection="anyRtl"
+        android:textDirection="anyRtl" android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
