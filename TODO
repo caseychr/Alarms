@@ -37,12 +37,14 @@
  - Create new theme in styles.xml
 
  - CountdownTimer
-   - Create edit text to enter time - In reverse
-   - Convert time entered to correct intervals
-   - Create Pause/Resume button - save the timer to resume
+   X Create edit text to enter time - In reverse
+   X Convert time entered to correct intervals
+   X Create Pause/Resume button - save the timer to resume
    - Cancel button - Animate from timer back to edit text
    - Create Start button - Animate from edit text to timer
    - Create Recycler Adapter for multiple countdown timers at once
+   - Create Service for timer to work when off
+   - Create notification as well
 
  - StopWatch
 

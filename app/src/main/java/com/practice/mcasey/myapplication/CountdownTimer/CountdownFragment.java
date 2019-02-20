@@ -7,13 +7,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.practice.mcasey.myapplication.R;
 
@@ -31,7 +34,6 @@ public class CountdownFragment extends Fragment {
     @BindView(R.id.start_timer) Button mStart;
     CountDownTimer mTimer;
     int mTimeInt;
-    int mMillisInFuture;
     View mView;
 
     @Nullable
@@ -45,45 +47,47 @@ public class CountdownFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_add, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_add:
+            Toast.makeText(getActivity(), "ADD", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @OnClick(R.id.start_timer)
     public void onStartTimer(){
-        setMillisInFuture(mTimerET.getText().toString());
-        Log.i("FUTURE", String.valueOf(mMillisInFuture));
-        mTimer = new CountDownTimer(mMillisInFuture, INTERVAL){
-
-            @Override
-            public void onTick(long l) {
-                String l_seconds = String.valueOf(l%60000);
-                String l_minutes = String.valueOf(l/60000);
-                String l_hours = String.valueOf(l/3600000);
-                Log.i("MINUTES", l_minutes);
-                if(l_seconds.length()==5)
-                    mTimerTV.setText(l_hours+" : "+l_minutes+" : "+l_seconds.substring(0,2));
-                else if(l_seconds.length()==3)
-                    mTimerTV.setText(l_hours+" : "+l_minutes+" : 00");
-                else
-                    mTimerTV.setText(l_hours+" : "+l_minutes+" : 0"+l_seconds.substring(0,1));
-            }
-
-            @Override
-            public void onFinish() {
-                mTimerTV.setText("DONE!!!");
-                mStart.setText("Start");
-            }
-        };
-        if(mStart.getText().equals("Start") || mStart.getText().equals("Resume")){
-            mStart.setText("Pause");
+        if(mStart.getText().equals(R.string.start)){
+            setMillisInFuture(mTimerET.getText().toString());
+            createTimer();
+            mStart.setText(R.string.pause);
             mTimer.start();
-        }
-        else if(mStart.getText().equals("Pause")){
+        } else if(mStart.getText().equals(R.string.resume)){
+            createTimer();
+            mStart.setText(R.string.pause);
+            mTimer.start();
+        } else if(mStart.getText().equals(R.string.pause)){
             String pausedTimer = mTimerTV.getText().toString();
-            mTimerTV.setText(pausedTimer);
-            mStart.setText("Resume");
+            setMillisInFuture(pausedTimer);
+            mStart.setText(R.string.resume);
             mTimer.cancel();
             //TODO set timer to paused time
         }
@@ -92,7 +96,9 @@ public class CountdownFragment extends Fragment {
     @OnClick(R.id.cancel_timer)
     public void onCancelTimer(){
         mTimer.cancel();
-        mStart.setText("Start");
+        mStart.setText(R.string.start);
+        mTimerTV.setText(R.string.countdown_tab);
+        mTimerET.setText("");
     }
 
     private void getInput(){
@@ -144,10 +150,6 @@ public class CountdownFragment extends Fragment {
                     if(sb.charAt(1) == ':'){
                         sb = sb.deleteCharAt(1).insert(2, ':');
                         sb = sb.deleteCharAt(4).insert(5, ':');
-                        updateView = true;
-                        Log.i("STRING_SEC", sb.toString().substring(sb.toString().length()-2, sb.toString().length()));
-                        Log.i("STRING_MIN", sb.toString().substring(sb.toString().length()-5, sb.toString().length()-3));
-                        Log.i("STRING_HRS", sb.toString().substring(sb.toString().length()-8, sb.toString().length()-6));
                     }
                 }
                 if (updateView) {
@@ -158,17 +160,30 @@ public class CountdownFragment extends Fragment {
                         if(sbString.charAt(i) == ':')
                             sbString.deleteCharAt(i);
                     }
-                    Log.i("STRING", sbString.toString());
-                    mMillisInFuture = Integer.parseInt(sbString.toString());
-                    Log.i("INTEGER", String.valueOf(mMillisInFuture));
-
+                    mTimeInt = Integer.parseInt(sbString.toString());
                 }
             }
         });
     }
 
+    private void createTimer(){
+        mTimer = new CountDownTimer(mTimeInt, INTERVAL){
+            @Override
+            public void onTick(long l) {
+                setTimerTextView(l);
+            }
+
+            @Override
+            public void onFinish() {
+                mTimerTV.setText(R.string.done);
+                mStart.setText(R.string.start);
+            }
+        };
+    }
+
     private void setMillisInFuture(String millisInFutureString){
-        mMillisInFuture = 0;
+        millisInFutureString = stripString(millisInFutureString);
+        mTimeInt = 0;
         int seconds = 0;
         int minutes = 0;
         int hours = 0;
@@ -178,22 +193,51 @@ public class CountdownFragment extends Fragment {
         else if(millisInFutureString.length()>=2)
             seconds = Integer.parseInt(millisInFutureString
                     .substring(millisInFutureString.length()-2, millisInFutureString.length()));
-        if(millisInFutureString.length()==4)
+        if(millisInFutureString.length()==3)
             minutes = Integer.parseInt(millisInFutureString
-                    .substring(millisInFutureString.length()-4, millisInFutureString.length()-3));
-        else if(millisInFutureString.length()>=5)
+                    .substring(millisInFutureString.length()-3, millisInFutureString.length()-2));
+        else if(millisInFutureString.length()>=4)
             minutes = Integer.parseInt(millisInFutureString
-                    .substring(millisInFutureString.length()-5, millisInFutureString.length()-3));
-        if(millisInFutureString.length()==7)
+                    .substring(millisInFutureString.length()-4, millisInFutureString.length()-2));
+        if(millisInFutureString.length()==5)
             hours = Integer.parseInt(millisInFutureString
-                    .substring(millisInFutureString.length()-7, millisInFutureString.length()-6));
-        else if(millisInFutureString.length()==8)
+                    .substring(millisInFutureString.length()-5, millisInFutureString.length()-4));
+        else if(millisInFutureString.length()==6)
             hours = Integer.parseInt(millisInFutureString
-                    .substring(millisInFutureString.length()-8, millisInFutureString.length()-6));
-        Log.i("INTS", "h "+hours+" m "+minutes+" s "+seconds);
-        mMillisInFuture += hours * 60;
-        mMillisInFuture += minutes * 60;
-        mMillisInFuture += seconds;
-        mMillisInFuture = mMillisInFuture * INTERVAL;
+                    .substring(millisInFutureString.length()-6, millisInFutureString.length()-4));
+        mTimeInt += hours * 60;
+        mTimeInt += minutes * 60;
+        mTimeInt += seconds;
+        mTimeInt = mTimeInt * INTERVAL;
+    }
+
+    private String stripString(String time){
+        return time.replaceAll(":", "");
+    }
+
+    private void setTimerTextView(long l){
+        String l_seconds = String.valueOf(l%60000);
+        String l_minutes = String.valueOf(l/60000);
+        String l_hours = String.valueOf(l/3600000);
+        if(l_seconds.length()==5)
+            l_seconds = l_seconds.substring(0,2);
+        else if(l_seconds.length()==3)
+            l_seconds = getResources().getString(R.string.double_zero);
+        else
+            l_seconds = R.string.zero+l_seconds.substring(0,1);
+        String a = stripString(mTimerET.getText().toString());
+        if(a.length()==1){
+            mTimerTV.setText(R.string.zero+l_seconds.substring(0,2));
+        }else if(a.length()==2){
+            mTimerTV.setText(l_seconds.substring(0,2));
+        }else if(a.length()==3){
+            mTimerTV.setText(l_minutes+":"+l_seconds.substring(0,2));
+        }else if(a.length()==4){
+            mTimerTV.setText(l_minutes+":"+l_seconds.substring(0,2));
+        }else if(a.length()==5){
+            mTimerTV.setText(l_hours+":"+l_minutes+":"+l_seconds.substring(0,2));
+        }else if(a.length()==6){
+            mTimerTV.setText(l_hours+":"+l_minutes+":"+l_seconds.substring(0,2));
+        }
     }
 }

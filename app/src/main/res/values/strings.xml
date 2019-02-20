@@ -29,4 +29,13 @@
     <string name="every_day">Every Day</string>
     <string name="week_day">Week Day</string>
     <string name="weekend_day">Weekend Day</string>
+
+    <string name="zero">0</string>
+    <string name="double_zero">00</string>
+
+    <string name="start">start</string>
+    <string name="resume">resume</string>
+    <string name="pause">pause</string>
+
+    <string name="done">DONE!!!</string>
 </resources>
