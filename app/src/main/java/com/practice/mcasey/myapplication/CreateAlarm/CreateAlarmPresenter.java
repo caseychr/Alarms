@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 public class CreateAlarmPresenter {
 
@@ -65,10 +66,9 @@ public class CreateAlarmPresenter {
         mView.updateDays();
     }
 
-    public void updateAlarm(String description, String time, String ringtone, String days, Alarm alarm){
+    public void updateAlarm(String description, String time, String days, Alarm alarm){
         alarm.setAlarmDescription(description);
         alarm.setTime(time);
-        alarm.setRingtone(ringtone);
         alarm.setDays(days);
         if(!days.equals("Today"))
             alarm.setRecurring(true);
@@ -78,8 +78,8 @@ public class CreateAlarmPresenter {
         mView.onClickCreateAlarm();
     }
 
-    public void createAlarm(String description, String time, String ringtone, String days, Alarm alarm){
-        alarm = new Alarm(description, time, ringtone, days, true ,false);
+    public void createAlarm(String description, String time, UUID uuid, String days, Alarm alarm){
+        alarm = new Alarm(description, time, days, uuid, true ,false);
         alarm.setTimeLong(timeLong);
         if(!days.equals("Today"))
             alarm.setRecurring(true);
@@ -114,40 +114,5 @@ public class CreateAlarmPresenter {
                 daysText += d+", ";
         }
         return daysText;
-    }
-
-    /**
-     * getRingtones - We need to grab the URI of the ringtones and then we can set the default URI for each alarm
-     * upon Pending Intent perhaps? But first we need to get permissions to alter settings from our app.
-     * https://stackoverflow.com/questions/32083410/cant-get-write-settings-permission/42327628
-     * @param context
-     * @return
-     */
-    public List<String> getRingtones(Context context){
-        if(!Settings.System.canWrite(context))
-            openAndroidPermissionsMenu(context);
-        //openAndroidPermissionsMenu(context);
-        Uri ringtoneUri = MediaStore.Audio.Media.getContentUri("Carbon");
-        //Ringtone  r = RingtoneManager.getRingtone(context, ringtoneUri);
-        List<String> ringtoneList = new ArrayList<>();
-        RingtoneManager ringtoneManager = new RingtoneManager(context);
-        ringtoneManager.setType(RingtoneManager.TYPE_ALARM);
-        Cursor cursor = ringtoneManager.getCursor();
-        while(cursor.moveToNext()){
-            String ringtoneTitle = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
-                    //cursor.getNotificationUri();
-            ringtoneList.add(ringtoneTitle);
-        }
-        //RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM, ringtoneUri);
-        Log.i("CANWRITE", String.valueOf(Settings.System.canWrite(context)));
-        Log.i("RINGTONES", ringtoneUri.toString());
-        Log.i("RINGTONES_DEFAULT", RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM).toString());
-        return ringtoneList;
-    }
-
-    private void openAndroidPermissionsMenu(Context context) {
-        Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-        intent.setData(Uri.parse("package:" + context.getPackageName()));
-        context.startActivity(intent);
     }
 }

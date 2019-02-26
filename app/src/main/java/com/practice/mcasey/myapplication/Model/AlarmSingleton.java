@@ -48,7 +48,7 @@ public class AlarmSingleton {
     }
 
     public Alarm getAlarm(Alarm alarm) {
-        AlarmCursorWrapper cursor = queryCrimes(Cols.DESCRIPTION + " = ?", new String[]{alarm.getAlarmDescription()});
+        AlarmCursorWrapper cursor = queryCrimes(Cols.UUID + " = ?", new String[]{alarm.getUUID().toString()});
         try {
             if (cursor.getCount() == 0) {
                 return null;
@@ -62,7 +62,7 @@ public class AlarmSingleton {
 
     public void updateAlarm(Alarm alarm) {
         ContentValues values = getContentValues(alarm);
-        mDatabase.update(NAME, values, Cols.DESCRIPTION + " = ?", new String[]{alarm.getAlarmDescription()});
+        mDatabase.update(NAME, values, Cols.UUID + " = ?", new String[]{alarm.getUUID().toString()});
         Log.i("SINGLETON_ALARMS", getAlarms().toString());
     }
 
@@ -72,7 +72,7 @@ public class AlarmSingleton {
     }
 
     public void deleteAlarm(Alarm alarm){
-        mDatabase.delete(NAME, Cols.DESCRIPTION + " = ?", new String[]{alarm.getAlarmDescription()});
+        mDatabase.delete(NAME, Cols.UUID + " = ?", new String[]{alarm.getUUID().toString()});
     }
 
     private AlarmCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
@@ -90,11 +90,11 @@ public class AlarmSingleton {
 
     private static ContentValues getContentValues(Alarm alarm){
         ContentValues values = new ContentValues();
+        values.put(UUID, alarm.getUUID().toString());
         values.put(DESCRIPTION, alarm.getAlarmDescription());
         values.put(TIME, alarm.getTime());
         values.put(TIME_LONG, alarm.getTimeLong());
         values.put(DAYS, alarm.getDays());
-        values.put(RINGTONE, alarm.getRingtone());
         values.put(ENABLED, alarm.isEnabled() ? 1:0);
         values.put(RECURRING, alarm.isRecurring() ? 1:0);
         return values;

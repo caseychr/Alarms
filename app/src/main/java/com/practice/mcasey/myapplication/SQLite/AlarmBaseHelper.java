@@ -19,11 +19,11 @@ public class AlarmBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table "+ NAME + "(" +
                 " _id integer primary key autoincrement, " +
+                Cols.UUID + ", " +
                 Cols.DESCRIPTION + ", " +
                 Cols.TIME + ", " +
                 Cols.TIME_LONG + ", " +
                 Cols.DAYS + ", " +
-                Cols.RINGTONE + ", " +
                 Cols.ENABLED + ", " +
                 Cols.RECURRING +
                 ")"

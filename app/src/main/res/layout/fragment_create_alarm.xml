@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
@@ -35,21 +35,12 @@
         android:layout_marginTop="16dp" android:gravity="center"
         android:text="@string/today" app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/create_alarm_description_et"/>
-    <TextView
-        android:id="@+id/create_alarm_ringtone_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:gravity="center" android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp" android:layout_marginTop="16dp" android:text="@string/ringtone"
-        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/create_alarm_days_tv"/>
     <Button
         android:id="@+id/create_alarm_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp" android:layout_marginTop="16dp" android:text="@string/create_alarm"
-        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/create_alarm_ringtone_tv"/>
+        android:layout_marginStart="8dp" android:layout_marginTop="24dp"
+        android:text="@string/create_alarm" app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/create_alarm_days_tv"/>
 </android.support.constraint.ConstraintLayout>

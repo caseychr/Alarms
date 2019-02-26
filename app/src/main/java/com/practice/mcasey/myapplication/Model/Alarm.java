@@ -7,24 +7,37 @@ import java.util.UUID;
 @Parcel
 public class Alarm {
 
+    private UUID mUUID;
     private String mAlarmDescription;
     private String mTime;
     private long mTimeLong;
     private String mDays;
-    private String mRingtone;
     private boolean mEnabled;
     private boolean mRecurring;
 
     public Alarm() {
+        mUUID = UUID.randomUUID();
     }
 
-    public Alarm(String alarmDescription, String time, String days, String ringtone, boolean enabled, boolean recurring) {
+    public Alarm(UUID uuid){
+        mUUID = uuid;
+    }
+
+    public Alarm(String alarmDescription, String time, String days, UUID uuid, boolean enabled, boolean recurring) {
+        mUUID = uuid;
         mAlarmDescription = alarmDescription;
         mTime = time;
         mDays = days;
-        mRingtone = ringtone;
         mEnabled = enabled;
         mRecurring = recurring;
+    }
+
+    public UUID getUUID() {
+        return mUUID;
+    }
+
+    public void setUUID(UUID UUID) {
+        mUUID = UUID;
     }
 
     public String getAlarmDescription() {
@@ -59,14 +72,6 @@ public class Alarm {
         mDays = days;
     }
 
-    public String getRingtone() {
-        return mRingtone;
-    }
-
-    public void setRingtone(String ringtone) {
-        mRingtone = ringtone;
-    }
-
     public boolean isEnabled() {
         return mEnabled;
     }
@@ -81,18 +86,5 @@ public class Alarm {
 
     public void setRecurring(boolean recurring) {
         mRecurring = recurring;
-    }
-
-    @Override
-    public String toString() {
-        return "Alarm{" +
-                "mAlarmDescription='" + mAlarmDescription + '\'' +
-                ", mTime='" + mTime + '\'' +
-                ", mTimeLong=" + mTimeLong +
-                ", mDays='" + mDays + '\'' +
-                ", mRingtone='" + mRingtone + '\'' +
-                ", mEnabled=" + mEnabled +
-                ", mRecurring=" + mRecurring +
-                '}';
     }
 }

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -75,16 +76,16 @@ public class CountdownFragment extends Fragment {
 
     @OnClick(R.id.start_timer)
     public void onStartTimer(){
-        if(mStart.getText().equals(R.string.start)){
+        if(mStart.getText().toString().equalsIgnoreCase(getResources().getString(R.string.start))){
             setMillisInFuture(mTimerET.getText().toString());
             createTimer();
             mStart.setText(R.string.pause);
             mTimer.start();
-        } else if(mStart.getText().equals(R.string.resume)){
+        } else if(mStart.getText().toString().equalsIgnoreCase(getResources().getString(R.string.resume))){
             createTimer();
             mStart.setText(R.string.pause);
             mTimer.start();
-        } else if(mStart.getText().equals(R.string.pause)){
+        } else if(mStart.getText().toString().equalsIgnoreCase(getResources().getString(R.string.pause))){
             String pausedTimer = mTimerTV.getText().toString();
             setMillisInFuture(pausedTimer);
             mStart.setText(R.string.resume);

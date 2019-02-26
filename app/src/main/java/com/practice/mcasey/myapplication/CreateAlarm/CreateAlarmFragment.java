@@ -53,23 +53,18 @@ public class CreateAlarmFragment extends Fragment implements CreateAlarmView{
     Bundle mBundle;
     PopupWindow mTimePickerPopupWindow;
     PopupWindow mDayPickerPopupWindow;
-    PopupWindow mRingtonePopupWindow;
     View mView;
     View mTimePickerView;
     View mDayPickerView;
-    View mRingtoneView;
 
     @BindView(R.id.create_alarm_time_tv) TextView mTime;
     @BindView(R.id.create_alarm_description_et) EditText mDescription;
     @BindView(R.id.create_alarm_days_tv) TextView mDays;
-    @BindView(R.id.create_alarm_ringtone_tv) TextView mRingtone;
     @BindView(R.id.create_alarm_btn) Button mCreateBtn;
 
     TimePicker mTimePicker;
     RecyclerView mDaysRecyclerView;
-    RecyclerView mRingtoneRecycleView;
     DayRecyclerAdapter mDayAdapter;
-    RingtoneRecyclerAdapter mRingtoneAdapter;
 
     Button mTimeCancelBtn;
     Button mTimeOkBtn;
@@ -124,7 +119,6 @@ public class CreateAlarmFragment extends Fragment implements CreateAlarmView{
             mTime.setText(mAlarm.getTime());
             mDescription.setText(mAlarm.getAlarmDescription());
             mDays.setText(mAlarm.getDays());
-            mRingtone.setText(mAlarm.getRingtone());
             mCreateBtn.setText("Update");
         }
     }
@@ -196,47 +190,16 @@ public class CreateAlarmFragment extends Fragment implements CreateAlarmView{
         });
     }
 
-    @OnClick(R.id.create_alarm_ringtone_tv)
-    void onRingtoneClick(){
-        /*final Uri currentTone= RingtoneManager.getActualDefaultRingtoneUri(getContext(), RingtoneManager.TYPE_ALARM);
-        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, currentTone);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
-        intent.putExtra(RingtoneManager.setActualDefaultRingtoneUri();)
-        startActivityForResult(intent, TONE_PICKER);*/
-        if(mRingtoneView == null){
-            mRingtoneView = mLayoutInflater.inflate(R.layout.popup_ringtone_picker, mViewGroup, false);
-            mRingtonePopupWindow = new PopupWindow(mRingtoneView,
-                    WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-            mRingtoneRecycleView = mRingtoneView.findViewById(R.id.ringtone_recycler_view);
-            if(mRingtoneAdapter == null){
-                mRingtoneAdapter = new RingtoneRecyclerAdapter(mPresenter.getRingtones(getContext()));
-                mRingtoneRecycleView.setAdapter(mRingtoneAdapter);
-            }
-            mRingtoneAdapter.notifyDataSetChanged();
-        }
-        mRingtonePopupWindow.showAtLocation(mView, Gravity.CENTER, ZERO, ZERO);
-        mRingtoneAdapter.setOnItemClickListener(new RingtoneRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onClick() {
-                updateRingtone();
-            }
-        });
-    }
-
     @OnClick(R.id.create_alarm_btn)
     void onCreateClick(){
         if(mCreateBtn.getText().equals("Create")){
             mPresenter.createAlarm(mDescription.getText().toString(), mTime.getText().toString(),
-                    mRingtone.getText().toString(), mDays.getText().toString(), mAlarm);
+                    mAlarm.getUUID(), mDays.getText().toString(), mAlarm);
         }
         else{
             Log.i("UPDATE", mDescription.getText().toString());
             mPresenter.updateAlarm(mDescription.getText().toString(), mTime.getText().toString(),
-                    mRingtone.getText().toString(), mDays.getText().toString(), mAlarm);
+                    mDays.getText().toString(), mAlarm);
         }
     }
 
@@ -259,12 +222,6 @@ public class CreateAlarmFragment extends Fragment implements CreateAlarmView{
     @Override
     public void updateDays() {
         mDays.setText(mPresenter.updateDaysText(mDayAdapter.mSelectedDays));
-    }
-
-    @Override
-    public void updateRingtone() {
-        mRingtone.setText(mRingtoneAdapter.mRingtoneString);
-        mRingtonePopupWindow.dismiss();
     }
 
     @Override

@@ -10,7 +10,5 @@ public interface CreateAlarmView {
 
     void updateDays();
 
-    void updateRingtone();
-
     void onClickCreateAlarm();
 }

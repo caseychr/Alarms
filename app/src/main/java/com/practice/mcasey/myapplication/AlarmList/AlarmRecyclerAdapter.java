@@ -71,7 +71,6 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
                 }
             }
         });
-        viewHolder.mRingtone.setText(alarm.getRingtone());
         viewHolder.mDays.setText(alarm.getDays());
     }
 
@@ -85,7 +84,6 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
         TextView mTime;
         TextView mDescription;
         TextView mDays;
-        TextView mRingtone;
         Switch mEnabled;
 
         public ViewHolder(@NonNull final View itemView) {
@@ -94,7 +92,6 @@ public class AlarmRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerAdap
             mTime = itemView.findViewById(R.id.tv_list_time);
             mDescription = itemView.findViewById(R.id.tv_list_description);
             mDays = itemView.findViewById(R.id.tv_list_day);
-            mRingtone = itemView.findViewById(R.id.tv_ringtone);
             mEnabled = itemView.findViewById(R.id.switch_list_enabled);
         }
 

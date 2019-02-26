@@ -30,4 +30,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'org.parceler:parceler-api:1.0.3'
     annotationProcessor "org.parceler:parceler:1.0.3"
+    implementation 'com.commsen.stopwatch.api:stopwatch:0.3'
 }
