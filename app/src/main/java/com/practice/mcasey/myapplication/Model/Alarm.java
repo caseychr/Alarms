@@ -87,4 +87,17 @@ public class Alarm {
     public void setRecurring(boolean recurring) {
         mRecurring = recurring;
     }
+
+    @Override
+    public String toString() {
+        return "Alarm{" +
+                "mUUID=" + mUUID +
+                ", mAlarmDescription='" + mAlarmDescription + '\'' +
+                ", mTime='" + mTime + '\'' +
+                ", mTimeLong=" + mTimeLong +
+                ", mDays='" + mDays + '\'' +
+                ", mEnabled=" + mEnabled +
+                ", mRecurring=" + mRecurring +
+                '}';
+    }
 }

@@ -2,56 +2,71 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guide_middle_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".33"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guide_middle_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".67"/>
 
         <TextView
             android:id="@+id/alarm_tab"
-            android:layout_width="105dp"
-            android:layout_height="25dp" android:layout_marginBottom="8dp"
-            android:gravity="center"
-            android:text="@string/alarms_tab"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center" android:text="@string/alarms_tab"
+            android:textColor="@color/colorPrimaryDark" android:textSize="18dp"
+            android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guide_middle_left" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/countdown_tab"
             android:layout_width="0dp"
             android:layout_height="27dp"
-            android:layout_marginBottom="8dp"
-            android:gravity="center"
-            android:text="@string/countdown_tab"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18dp"
+            android:gravity="center" android:text="@string/countdown_tab"
+            android:textColor="@color/colorPrimaryDark" android:textSize="18dp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toStartOf="@+id/stopwatch_tab"
-            app:layout_constraintStart_toEndOf="@+id/alarm_tab" app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guide_middle_right"
+            app:layout_constraintStart_toStartOf="@+id/guide_middle_left"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/stopwatch_tab"
-            android:layout_width="119dp"
-            android:layout_height="27dp" android:layout_marginBottom="8dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:gravity="center"
-            android:text="@string/stopwatch_tab"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="18dp"
-            android:textStyle="bold" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+            android:text="@string/stopwatch_tab" android:textColor="@color/colorPrimaryDark" android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guide_middle_right" app:layout_constraintTop_toTopOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
     </android.support.constraint.ConstraintLayout>
 

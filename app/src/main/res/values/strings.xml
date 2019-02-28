@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Alarms</string>
+    <string name="app_name">Timing</string>
 
     <string name="create_alarm">Create</string>
     <string name="create_alarm_time">11:00 PM</string>

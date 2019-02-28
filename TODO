@@ -1,8 +1,5 @@
-- Fix UI tabs for Alarms, CountdownTimer and StopWatch
-- Create new theme in styles.xml
-- App icon
 - Alarm
-   - Make Alarm sound right on the 00;
+   - MVP
    - Dialog to remove alarms that are not recurring
    - Create Alarm Service (Started Service)
      - Resets recurring alarms correctly
@@ -15,6 +12,7 @@
      - Remove trigger alarm fragment
    - Make CreateAlarm fragment partially slide up from bottom - Make animation for sliding fragment
  - CountdownTimer
+   - MVP
    - Cancel button - Animate from timer back to edit text
    - Create Start button - Animate from edit text to timer
    - Create Recycler Adapter for multiple countdown timers at once
