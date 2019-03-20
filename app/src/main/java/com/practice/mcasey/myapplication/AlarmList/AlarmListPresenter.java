@@ -17,7 +17,15 @@ public class AlarmListPresenter {
     public void sortAlarms(List<Alarm> alarms){
         if(alarms != null)
             Collections.sort(alarms, mAlarmComparator);
+    }
 
+    public void deleteAlarm(List<Alarm> alarms, int position){
+        if(alarms.size()==1){
+            alarms.clear();
+        }
+        else{
+            alarms.remove(position);
+        }
     }
 
     Comparator<Alarm> mAlarmComparator = new Comparator<Alarm>() {

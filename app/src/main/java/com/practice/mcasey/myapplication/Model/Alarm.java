@@ -7,13 +7,13 @@ import java.util.UUID;
 @Parcel
 public class Alarm {
 
-    private UUID mUUID;
-    private String mAlarmDescription;
-    private String mTime;
-    private long mTimeLong;
-    private String mDays;
-    private boolean mEnabled;
-    private boolean mRecurring;
+    UUID mUUID;
+    String mAlarmDescription;
+    String mTime;
+    long mTimeLong;
+    String mDays;
+    boolean mEnabled;
+    boolean mRecurring;
 
     public Alarm() {
         mUUID = UUID.randomUUID();

@@ -25,7 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CountdownFragment extends Fragment {
+public class CountdownFragment extends Fragment implements CountdownView{
 
     private static final int INTERVAL = 1000;
 
@@ -101,6 +101,8 @@ public class CountdownFragment extends Fragment {
         mTimerTV.setText(R.string.countdown_tab);
         mTimerET.setText("");
     }
+
+
 
     private void getInput(){
         mTimerET.addTextChangedListener(new TextWatcher() {
@@ -240,5 +242,35 @@ public class CountdownFragment extends Fragment {
         }else if(a.length()==6){
             mTimerTV.setText(l_hours+":"+l_minutes+":"+l_seconds.substring(0,2));
         }
+    }
+
+    @Override
+    public void onClickCancel() {
+
+    }
+
+    @Override
+    public void onClickStart() {
+
+    }
+
+    @Override
+    public void onClickPause() {
+
+    }
+
+    @Override
+    public void onClickResume() {
+
+    }
+
+    @Override
+    public void updateCountdown() {
+
+    }
+
+    @Override
+    public void updateEditTextTimer() {
+        
     }
 }

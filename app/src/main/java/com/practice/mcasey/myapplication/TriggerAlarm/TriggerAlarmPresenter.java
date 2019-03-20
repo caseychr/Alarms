@@ -13,8 +13,6 @@ public class TriggerAlarmPresenter {
     }
 
     public void turnOffAlarm(){
-        if(AlarmListFragment.ringtone.isPlaying())
-            AlarmListFragment.ringtone.stop();
         mView.onClickTurnOffAlarm();
     }
 }

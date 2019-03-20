@@ -1,7 +1,14 @@
 package com.practice.mcasey.myapplication.AlarmList;
 
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_NEUTRAL;
+import static android.content.DialogInterface.BUTTON_POSITIVE;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -12,7 +19,9 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -24,11 +33,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import com.practice.mcasey.myapplication.CreateAlarm.CreateAlarmFragment;
 import com.practice.mcasey.myapplication.MainActivity;
 import com.practice.mcasey.myapplication.Model.Alarm;
 import com.practice.mcasey.myapplication.Model.AlarmSingleton;
+import com.practice.mcasey.myapplication.PastAlarmDialog;
 import com.practice.mcasey.myapplication.R;
 import com.practice.mcasey.myapplication.Services.AlarmService;
 import com.practice.mcasey.myapplication.Services.NotificationService;
@@ -37,6 +48,7 @@ import com.practice.mcasey.myapplication.TriggerAlarm.TriggerAlarmFragment;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,14 +58,13 @@ public class AlarmListFragment extends Fragment implements AlarmListView {
 
     public static final String NOTIFICATION_ALARM_TIME = "NOTIFICATION_ALARM_TIME";
     public static final String NOTIFICATION_ALARM_DESC = "NOTIFICATION_ALARM_DESC";
+    public static final String REMOVE_PAST_ALARMS = "REMOVE_PAST_ALARMS";
 
     Bundle mBundle;
     View mView;
     AlarmRecyclerAdapter mAdapter;
     List<Alarm> mAlarms = new ArrayList<>();
     Uri URIRingtone;
-
-    public static Ringtone ringtone;
 
     public Intent mAlarmService;
 
@@ -74,7 +85,6 @@ public class AlarmListFragment extends Fragment implements AlarmListView {
             @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_alarm_list, container, false);
         ButterKnife.bind(this, mView);
-        ringtone = RingtoneManager.getRingtone(getContext(), URIRingtone);
         mPresenter = new AlarmListPresenter(this);
         return mView;
     }
@@ -86,6 +96,7 @@ public class AlarmListFragment extends Fragment implements AlarmListView {
         if(mAlarms != null && !mAlarms.isEmpty())
             getActivity().startService(mAlarmService);
         updateUI();
+        checkPastAlarms();
     }
 
     @Override
@@ -103,6 +114,34 @@ public class AlarmListFragment extends Fragment implements AlarmListView {
                 getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down)
                         .replace(R.id.fragment_container, new CreateAlarmFragment()).commit();
             default: return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void checkPastAlarms(){
+        for(Alarm alarm:mAlarms){
+            if(alarm.getTimeLong()< Calendar.getInstance().getTimeInMillis() && !alarm.isRecurring()){
+                Toast.makeText(getActivity(), "Remove non-recurring past alarms?", Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Remove Past Alarms?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                removeOldAlarms();
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .create().show();
+            }
+        }
+    }
+
+    private void removeOldAlarms(){
+        for(Alarm alarm:mAlarms){
+            if(alarm.getTimeLong()< Calendar.getInstance().getTimeInMillis() && !alarm.isRecurring()){
+                AlarmSingleton.getInstance(getContext()).deleteAlarm(mAlarms.get(mAdapter.adapterPosition));
+                mPresenter.deleteAlarm(mAlarms, mAdapter.adapterPosition);
+            }
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -131,14 +170,8 @@ public class AlarmListFragment extends Fragment implements AlarmListView {
             @Override
             public void onDelete() {
                 AlarmSingleton.getInstance(getContext()).deleteAlarm(mAlarms.get(mAdapter.adapterPosition));
-                if(mAlarms.size()==1){
-                    mAlarms.clear();
-                    mAdapter.notifyDataSetChanged();
-                }
-                else{
-                    mAlarms.remove(mAdapter.adapterPosition);
-                    mAdapter.notifyDataSetChanged();
-                }
+                mPresenter.deleteAlarm(mAlarms, mAdapter.adapterPosition);
+                mAdapter.notifyDataSetChanged();
             }
         });
         getActivity().stopService(mAlarmService);
@@ -169,7 +202,7 @@ public class AlarmListFragment extends Fragment implements AlarmListView {
             MainActivity.sNotificationService = new Intent(context, NotificationService.class);
 
             Uri ringtoneUri = MediaStore.Audio.Media.getContentUriForPath("content://media/Carbon/audio/media");
-            Ringtone  r = RingtoneManager.getRingtone(context, ringtoneUri);
+            Ringtone  ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
 
             Fragment fragment = new TriggerAlarmFragment();
             String description = intent.getStringExtra(AlarmService.ALARM_TRIGGERED);
@@ -177,12 +210,11 @@ public class AlarmListFragment extends Fragment implements AlarmListView {
             bundle.putString(AlarmService.ALARM_TRIGGERED, description);
             fragment.setArguments(bundle);
             MainActivity.fm.beginTransaction().replace(R.id.fragment_container, fragment).commit();
-            r.play();
+            ringtone.play();
 
             MainActivity.sNotificationService.putExtra(NOTIFICATION_ALARM_TIME, intent.getStringExtra(AlarmService.NOTIFICATION_ALARM_TIME));
             MainActivity.sNotificationService.putExtra(NOTIFICATION_ALARM_DESC, description);
             context.startService(MainActivity.sNotificationService);
-
         }
     }
 }

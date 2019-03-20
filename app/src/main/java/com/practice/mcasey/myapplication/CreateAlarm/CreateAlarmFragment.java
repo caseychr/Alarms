@@ -1,8 +1,5 @@
 package com.practice.mcasey.myapplication.CreateAlarm;
 
-import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,12 +23,9 @@ import android.widget.TimePicker;
 
 import com.practice.mcasey.myapplication.AlarmList.AlarmListFragment;
 import com.practice.mcasey.myapplication.Model.Alarm;
-import com.practice.mcasey.myapplication.Model.AlarmSingleton;
 import com.practice.mcasey.myapplication.R;
 
 import org.parceler.Parcels;
-
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,7 +36,6 @@ public class CreateAlarmFragment extends Fragment implements CreateAlarmView{
 
     private static final int ZERO = 00;
     public static final String CREATE_ALARM = "CREATE_ALARM";
-    public static final int TONE_PICKER = 1;
 
     LayoutInflater mLayoutInflater;
     ViewGroup mViewGroup;

@@ -1,6 +1,6 @@
 - Alarm
    - MVP
-   - Dialog to remove alarms that are not recurring
+   X Dialog to remove alarms that are not recurring
    - Create Alarm Service (Started Service)
      - Resets recurring alarms correctly
      - Triggers alarm in background service
